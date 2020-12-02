@@ -6,8 +6,8 @@ import Data.List (tails)
 import Data.List.Split (splitOn)
 
 data Password = Password
-  { minimum :: Int,
-    maximum :: Int,
+  { min_ :: Int,
+    max_ :: Int,
     unknown :: String,
     value :: String
   }
@@ -18,14 +18,16 @@ data Password = Password
 -}
 parsePassword :: String -> Password
 parsePassword text =
-  Password {minimum = 1, maximum = 2, unknown = unknown, value = value}
+  Password {min_ = 1, max_ = 2, unknown = unknown, value = value}
   where
     [pwLength, unknown, value] = words text
-    [min, max] = splitOn "-" pwLength
+    [min_, max_] = splitOn "-" pwLength
 
 isInvalid :: Password -> Bool
 isInvalid password =
-  pwLength < password . minimum || pwLwbLength > password . maximum
+  length_ < (password . min_) || length_ > (password . max_)
+  where
+    length_ = length $ password . value
 
 part01 :: String -> Int
 part01 content =
