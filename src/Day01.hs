@@ -32,6 +32,6 @@ findValues size values =
 
 main :: IO ()
 main = do
-  values <- parseFile "input01.txt"
+  values <- parseFile "./src/Day01.txt"
   print $ findValues 2 values
   print $ findValues 3 values
