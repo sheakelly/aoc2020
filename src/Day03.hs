@@ -16,7 +16,7 @@ import Prelude hiding (lines, max, min)
 
 data Coord = Coord {x :: Int, y :: Int} deriving (Show)
 
-data Slope = Slope {down :: Int, right :: Int}
+data Slope = Slope {right :: Int, down :: Int}
 
 move :: Int -> Int -> String -> Coord -> Coord
 move right down row (Coord {x, y}) =
@@ -50,7 +50,7 @@ traverseMap content (Slope {down, right}) =
 
 part01 :: String -> Int
 part01 content =
-  traverseMap content (Slope 1 3)
+  traverseMap content (Slope 3 1)
 
 part02 :: String -> Int
 part02 content =
