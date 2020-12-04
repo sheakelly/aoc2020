@@ -16,6 +16,8 @@ import Prelude hiding (lines, max, min)
 
 data Coord = Coord {x :: Int, y :: Int} deriving (Show)
 
+data Slope = Slope {down :: Int, right :: Int}
+
 move :: Int -> Int -> String -> Coord -> Coord
 move right down row (Coord {x, y}) =
   Coord {x = adjusted, y = y + down}
@@ -30,11 +32,11 @@ isTree _ = False
 isTreeAt :: Int -> String -> Bool
 isTreeAt i row = isTree $ row !! i
 
-part01 :: String -> Int
-part01 content =
+traverseMap :: String -> Slope -> Int
+traverseMap content (Slope {down, right}) =
   foldl
     ( \(coord@(Coord {x, y}), trees) row ->
-        ( move 3 1 row coord,
+        ( move right down row coord,
           if isTreeAt x row
             then trees + 1
             else trees
@@ -46,7 +48,17 @@ part01 content =
   where
     map = lines content
 
+part01 :: String -> Int
+part01 content =
+  traverseMap content (Slope 1 3)
+
+part02 :: String -> Int
+part02 content =
+  traverseMap content <$> [Slope 1 1, Slope 3 1, Slope 5 1, Slope 7 1, Slope 1 2]
+    & product
+
 main :: IO ()
 main = do
   content <- readFile "./src/Day03.txt"
   print $ part01 content
+  print $ part02 content
