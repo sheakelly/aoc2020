@@ -1,0 +1,39 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main where
+
+import Data.Function ((&))
+import Data.Map (Map)
+import qualified Data.Map as Map
+import Data.Text hiding (foldl, map)
+import Debug.Trace
+import Prelude hiding (lines, max, min)
+
+type Bags = Map Text [Text]
+
+addBag :: [Text] -> Bags -> Bags
+addBag [] bags = bags
+addBag [_] bags = bags
+addBag (x : xs) bags = map (\x' -> Map.updateWithKey (\k a -> a::x) x' bags) xs
+
+part01 :: String -> Bags
+part01 input =
+  pack input
+    & replace " bags contain no other bags." ""
+    & replace " bags contain " "|"
+    & replace " bag, " "|"
+    & replace " bags, " "|"
+    & replace " bag." ""
+    & replace " bags." ""
+    & lines
+    & map (splitOn "|")
+    & foldl (flip addBag) Map.empty
+
+part02 :: String -> Int
+part02 _ = 0
+
+main :: IO ()
+main = do
+  input <- readFile "./src/Day07.txt"
+  print $ part01 input
+  print $ part02 input
